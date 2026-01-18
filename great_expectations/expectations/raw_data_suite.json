@@ -1,0 +1,43 @@
+{
+  "expectation_suite_name": "raw_data_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "InvoiceNo",
+          "StockCode",
+          "Description",
+          "Quantity",
+          "InvoiceDate",
+          "UnitPrice",
+          "CustomerID",
+          "Country"
+        ]
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "InvoiceNo"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "Quantity",
+        "min_value": 1
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "UnitPrice",
+        "min_value": 0
+      }
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "0.18.21"
+  }
+}
