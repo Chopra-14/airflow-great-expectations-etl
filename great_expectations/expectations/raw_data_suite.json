@@ -15,26 +15,6 @@
           "Country"
         ]
       }
-    },
-    {
-      "expectation_type": "expect_column_values_to_not_be_null",
-      "kwargs": {
-        "column": "InvoiceNo"
-      }
-    },
-    {
-      "expectation_type": "expect_column_values_to_be_between",
-      "kwargs": {
-        "column": "Quantity",
-        "min_value": 1
-      }
-    },
-    {
-      "expectation_type": "expect_column_values_to_be_between",
-      "kwargs": {
-        "column": "UnitPrice",
-        "min_value": 0
-      }
     }
   ],
   "meta": {
