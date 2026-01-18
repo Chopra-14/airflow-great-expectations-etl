@@ -1,0 +1,25 @@
+name: transformed_data_checkpoint
+config_version: 1.0
+
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-transformed"
+
+expectation_suite_name: transformed_data_suite
+
+batch_request:
+  datasource_name: retail_datasource
+  data_connector_name: default_runtime_data_connector_name
+  data_asset_name: transformed_data
+
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+
+  - name: store_evaluation_params
+    action:
+      class_name: StoreEvaluationParametersAction
+
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
