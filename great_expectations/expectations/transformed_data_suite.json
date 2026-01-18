@@ -1,0 +1,26 @@
+{
+  "expectation_suite_name": "transformed_data_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_to_exist",
+      "kwargs": {
+        "column": "total_amount"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "InvoiceNo"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "InvoiceDate"
+      }
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "0.18.21"
+  }
+}
