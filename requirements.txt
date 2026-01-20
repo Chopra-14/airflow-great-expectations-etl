@@ -1,1 +1,4 @@
+pandas
+numpy
 great-expectations==0.18.21
+pytest

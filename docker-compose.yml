@@ -1,7 +1,7 @@
 # version: "3.8"
 
 # services:
-#   postgres:
+#   airflow_postgres:
 #     image: postgres:13
 #     environment:
 #       POSTGRES_USER: airflow
@@ -12,131 +12,67 @@
 
 #   airflow-webserver:
 #     image: apache/airflow:2.7.3
+#     container_name: airflow_webserver
 #     depends_on:
-#       - postgres
+#       - airflow_postgres
 #     environment:
 #       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-#       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-#       AIRFLOW__CORE__FERNET_KEY: druIh5lcmWAOXP4P7VJREWI8SQ8wViBvs-9A7nB0DRo=
-#       AIRFLOW__WEBSERVER__SECRET_KEY: druIh5lcmWAOXP4P7VJREWI8SQ8wViBvs-9A7nB0DRo=
+#       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow_postgres/airflow
 #       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
 #     volumes:
 #       - ./dags:/opt/airflow/dags
+#       - ./etl_scripts:/opt/airflow/etl_scripts
 #       - ./great_expectations:/opt/airflow/great_expectations
+#       - ./data:/opt/airflow/data
 #     ports:
 #       - "8080:8080"
-#     command: webserver
+#     command: >
+#       bash -c "
+#       airflow db migrate &&
+#       airflow users create
+#         --username admin
+#         --password admin
+#         --firstname Admin
+#         --lastname User
+#         --role Admin
+#         --email admin@example.com || true &&
+#       airflow webserver
+#       "
 
 #   airflow-scheduler:
 #     image: apache/airflow:2.7.3
+#     container_name: airflow_scheduler
 #     depends_on:
-#       - postgres
+#       - airflow-webserver
 #     environment:
 #       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-#       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-#       AIRFLOW__CORE__FERNET_KEY: druIh5lcmWAOXP4P7VJREWI8SQ8wViBvs-9A7nB0DRo=
+#       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow_postgres/airflow
 #     volumes:
 #       - ./dags:/opt/airflow/dags
+#       - ./etl_scripts:/opt/airflow/etl_scripts
 #       - ./great_expectations:/opt/airflow/great_expectations
-#     command: scheduler
+#       - ./data:/opt/airflow/data
+#     command: airflow scheduler
 
-#   airflow-init:
-#     image: apache/airflow:2.7.3
+#   services:
+#   etl-service:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.etl
+#     container_name: etl-service
+
+#     volumes:
+#       - .:/app
+#     working_dir: /app
+#     command: tail -f /dev/null
 #     depends_on:
-#       - postgres
-#     environment:
-#       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-#     command: >
-#       bash -c "
-#       airflow db init &&
-#       airflow users create
-#       --username admin
-#       --password admin
-#       --firstname Admin
-#       --lastname User
-#       --role Admin
-#       --email admin@example.com
-#       "
+#       - airflow_postgres
 
 # volumes:
 #   postgres-db-volume:
-
-
 services:
-  postgres:
-    image: postgres:13
-    container_name: airflow_postgres
-    environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
-    volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 10s
-      retries: 5
-      start_period: 5s
-
-  airflow-webserver:
-    image: apache/airflow:2.7.3
-    container_name: airflow_webserver
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__WEBSERVER__SECRET_KEY: airflow_secret_key
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./etl_scripts:/opt/airflow/etl_scripts
-      - ./great_expectations:/opt/airflow/great_expectations
-      - ./data:/opt/airflow/data
-    ports:
-      - "8080:8080"
-    command: >
-      bash -c "
-      airflow db migrate &&
-      airflow users create
-        --username admin
-        --password admin
-        --firstname Admin
-        --lastname User
-        --role Admin
-        --email admin@example.com || true &&
-      airflow webserver
-      "
-
-  airflow-scheduler:
-    image: apache/airflow:2.7.3
-    container_name: airflow_scheduler
-    depends_on:
-      postgres:
-        condition: service_healthy
-      airflow-webserver:
-        condition: service_started
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./etl_scripts:/opt/airflow/etl_scripts
-      - ./great_expectations:/opt/airflow/great_expectations
-      - ./data:/opt/airflow/data
-    command: airflow scheduler
-
   etl-service:
     build:
       context: .
       dockerfile: Dockerfile.etl
-    container_name: etl_service
-    volumes:
-      - ./etl_scripts:/app/etl_scripts
-      - ./great_expectations:/app/great_expectations
-      - ./data:/app/data
-    command: ["python", "-c", "print('ETL service ready')"]
-
-volumes:
-  postgres-db-volume:
+    container_name: etl-service
