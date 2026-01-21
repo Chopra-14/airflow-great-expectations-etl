@@ -7,7 +7,6 @@ The pipeline extracts e-commerce data, validates data quality, performs transfor
 
 The entire system is **containerized** and follows modern **data engineering best practices**.
 
----
 
 ## 🏗 Architecture Overview
 
@@ -103,7 +102,6 @@ Ensure the following containers are running:
    - All tasks turn **GREEN**
    - DAG run status = **SUCCESS**
 
----
 ```
 ## ✅ DAG Configuration
 ```
@@ -176,7 +174,7 @@ Screenshot	Description
 
 ⭐ **Includes mandatory + bonus screenshots**
 ```
----
+```
 
 ## 🗄 How to Verify SQLite Database
 
