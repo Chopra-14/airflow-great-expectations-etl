@@ -5,7 +5,7 @@
 This project implements an **end-to-end ETL pipeline** using **Apache Airflow**, **Great Expectations**, and **Docker**.  
 The pipeline extracts e-commerce data, validates data quality, performs transformations, and loads the processed data while ensuring **data reliability through automated validations**.
 
-The entire system is **containerized** and **production-aligned**, following modern data engineering best practices.
+The entire system is **containerized** and follows modern **data engineering best practices**.
 
 ---
 
@@ -23,166 +23,128 @@ Transform Data
 Validate Transformed Data (Great Expectations)
    ↓
 Load Data
-```
+🧩 Components
+Airflow Webserver & Scheduler – Workflow orchestration
 
-### 🧩 Components
+ETL Service (Python) – Data transformation logic & unit tests
 
-- **Airflow Webserver & Scheduler** – Workflow orchestration  
-- **ETL Service (Python)** – Transformations & unit tests  
-- **Great Expectations** – Data quality validation  
-- **PostgreSQL** – Airflow metadata database  
-- **Docker Compose** – Service orchestration  
+Great Expectations – Data quality validation
 
----
+PostgreSQL – Airflow metadata database
 
-## 🧰 Tool Stack
+Docker Compose – Service orchestration
 
-| Tool | Purpose |
-|----|----|
-| Apache Airflow | Workflow orchestration |
-| Great Expectations | Data validation |
-| Python 3.10 | ETL logic |
-| Docker & Docker Compose | Containerization |
-| Pytest | Unit testing |
-| SQLite | Analytics data storage |
-| Git & GitHub | Version control |
-
----
-
-## ⚙️ Setup Instructions
-
-### 1️⃣ Clone Repository
-```bash
+🧰 Tool Stack
+Tool	Purpose
+Apache Airflow	Workflow orchestration
+Great Expectations	Data validation
+Python 3.10	ETL logic
+Docker & Docker Compose	Containerization
+Pytest	Unit testing
+SQLite	Analytics data storage
+Git & GitHub	Version control
+⚙️ Setup Instructions
+1️⃣ Clone Repository
 git clone https://github.com/Chopra-14/airflow-great-expectations-etl.git
 cd airflow-great-expectations-etl
-```
+2️⃣ Environment Variables
+Create a file named .env.example:
 
-### 2️⃣ Environment Variables
-
-Create `.env.example`:
-
-```env
 AIRFLOW_UID=50000
 SQLITE_DB_PATH=/data/analytics.db
-```
-
-### 3️⃣ Start All Services
-```bash
+3️⃣ Start All Services
 docker-compose up -d
-```
-
-### 4️⃣ Verify Containers
-```bash
+4️⃣ Verify Containers
 docker ps
-```
+Ensure the following containers are running:
 
-Ensure these containers are running:
+airflow_webserver
 
-- airflow_webserver  
-- airflow_scheduler  
-- etl-service  
-- postgres  
+airflow_scheduler
 
----
+etl-service
 
-## 🚀 DAG Execution Steps
+postgres
 
-1. Open Airflow UI → http://localhost:8080  
-2. Enable DAG: `ecommerce_analytics_pipeline`  
-3. Trigger DAG manually ▶️  
+🚀 DAG Execution Steps
+Open Airflow UI → http://localhost:8080
 
-### ✅ Expected Result
+Enable the DAG: ecommerce_analytics_pipeline
 
-- All tasks **GREEN**
-- DAG run status = **SUCCESS**
+Trigger the DAG manually ▶️
 
----
+Confirm:
 
-## ✅ DAG Configuration
+All tasks turn GREEN
 
-| Setting | Value |
-|------|------|
-| Schedule | `@daily` |
-| Retries | 2 |
-| Retry Delay | 5 minutes |
-| Catchup | False |
+DAG run status = SUCCESS
 
----
+✅ DAG Configuration
+Setting	Value
+Schedule	@daily
+Retries	2
+Retry Delay	5 minutes
+Catchup	False
+🔍 Validation Strategy (Great Expectations)
+✔ Raw Data Validation
+Column presence checks
 
-## 🔍 Validation Strategy (Great Expectations)
+Schema consistency
 
-### ✔ Raw Data Validation
-- Column presence checks  
-- Schema consistency  
-- Executed via Great Expectations checkpoint  
+Executed via Great Expectations checkpoint
 
-### ✔ Transformed Data Validation
-- Schema integrity checks  
-- Data consistency checks  
+✔ Transformed Data Validation
+Schema integrity checks
 
-### ✔ Failure Handling
-- DAG fails immediately if validation fails  
-- Downstream tasks are blocked  
+Data consistency checks
 
----
+✔ Failure Handling
+DAG fails immediately if validation fails
 
-## 🧪 Unit Testing
+Downstream tasks are blocked
 
-Run tests inside ETL container:
+🧪 Unit Testing
+Run tests inside the ETL container:
 
-```bash
 docker-compose exec etl-service pytest
-```
+Included Tests
+Transformation logic test
 
-### Included Tests
-- Transformation logic test  
-- Schema validation test  
+Schema validation test
 
 ✔ Passing tests ensure reliable ETL logic
 
----
+🗂 Screenshots (Evidence)
+📁 screenshots/
+Screenshot	Description
+Screenshot_5_docker_ps_running.png	All containers running
+Screenshot_6_pytest_success.png	Pytest success
+Screenshot_1_Data_Docs_Validation_Result.png	GE Data Docs
+Screenshot_2_Raw_Data_Suite_Detail.png	Raw data expectation suite
+Screenshot_3_Checkpoint_Run_Success.png	Checkpoint run success
+Screenshot_4_ge_checkpoint_cli.png	GE CLI checkpoint run
+📁 screenshots/dags_screenshots/
+Screenshot	Description
+01_airflow_dags_page.png	DAG list in Airflow
+02_dag_grid_success.png	Successful DAG run
+03_dag_graph_view.png	DAG graph view
+04_dag_run_details.png	DAG run details
+05_task_log_success.png	Task logs
+06_dag_code_file.png	DAG code view
+⭐ Includes mandatory + bonus screenshots
 
-## 🗂 Screenshots (Evidence)
-
-| Screenshot | Description |
-|----------|------------|
-| step13_01_docker_ps_running.png | All containers running |
-| step14_02_airflow_dag_list.png | DAG visible in Airflow |
-| step14_03_dag_graph_view.png | DAG graph view |
-| step14_04_dag_grid_success.png | All tasks successful |
-| step14_05_task_log_success.png | Task log output |
-| step14_06_great_expectations_data_docs.png | GE Data Docs |
-| step12_01_pytest_success.png | Pytest success |
-
-### ⭐ Bonus Screenshots
-- Great Expectations CLI validation  
-- Expectation Suite HTML  
-- Data Docs index page  
-
----
-
-## 🗄 How to Verify SQLite Database
-
-```bash
+🗄 How to Verify SQLite Database
 docker-compose exec etl-service bash
 sqlite3 /data/analytics.db
 .tables
 SELECT * FROM analytics_table LIMIT 5;
-```
+🏁 Final Status
+✔ Fully containerized
+✔ Automated data validation implemented
+✔ Unit test coverage added
+✔ End-to-end execution verified
+✔ Portfolio-ready project
 
----
-
-## 🏁 Final Status
-
-✔ Fully containerized  
-✔ Automated validation implemented  
-✔ Unit test coverage added  
-✔ End-to-end execution verified  
-✔ **Portfolio-ready project**
-
----
-
-## 🙌 Author
-
-**Chopra Lakshmi Sathvika**  
+🙌 Author
+Chopra Lakshmi Sathvika
 Data Engineering | Apache Airflow | Great Expectations | Docker
