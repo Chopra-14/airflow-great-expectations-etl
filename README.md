@@ -200,8 +200,6 @@ List tables:
 ```sql
 SELECT * FROM analytics_table LIMIT 5;
 ```
-```
-
 ## 🏁 Final Status
 ```
 - ✔ Fully containerized
