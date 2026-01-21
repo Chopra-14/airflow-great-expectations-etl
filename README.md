@@ -209,6 +209,6 @@ SELECT * FROM analytics_table LIMIT 5;
 
 ## 🙌 Author
 ```
-**Chopra Lakshmi Sathvika**  
+Chopra Lakshmi Sathvika
 Data Engineering | Apache Airflow | Great Expectations | Docker
 ```
