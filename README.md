@@ -67,14 +67,15 @@ etl-service
 postgres
 
 🚀 DAG Execution Steps
-Open Airflow UI → http://localhost:8080
+Open Airflow UI
+👉 http://localhost:8080
 
-Enable the DAG: ecommerce_analytics_pipeline
+Enable the DAG
+ecommerce_analytics_pipeline
 
 Trigger the DAG manually ▶️
 
 Confirm:
-
 All tasks turn GREEN
 
 DAG run status = SUCCESS
@@ -119,7 +120,7 @@ Schema validation test
 Screenshot	Description
 Screenshot_5_docker_ps_running.png	All containers running
 Screenshot_6_pytest_success.png	Pytest success
-Screenshot_1_Data_Docs_Validation_Result.png	GE Data Docs
+Screenshot_1_Data_Docs_Validation_Result.png	Great Expectations Data Docs
 Screenshot_2_Raw_Data_Suite_Detail.png	Raw data expectation suite
 Screenshot_3_Checkpoint_Run_Success.png	Checkpoint run success
 Screenshot_4_ge_checkpoint_cli.png	GE CLI checkpoint run
