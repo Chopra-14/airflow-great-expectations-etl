@@ -201,6 +201,7 @@ List tables:
 SELECT * FROM analytics_table LIMIT 5;
 ```
 ```
+
 ## 🏁 Final Status
 ```
 - ✔ Fully containerized
@@ -214,5 +215,4 @@ SELECT * FROM analytics_table LIMIT 5;
 ```
 **Chopra Lakshmi Sathvika**  
 Data Engineering | Apache Airflow | Great Expectations | Docker
-```
 ```
